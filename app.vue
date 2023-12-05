@@ -1,6 +1,5 @@
 <template>
   <div>
-    <Testaaaa />
     <NuxtPage />
   </div>
 </template>
