@@ -6,12 +6,13 @@ const form = reactive({
 })
 
 const loginUser = async () => {
-  const  teste = await $fetch('https://localhost:7259/api/users/login', {
+  const  { data, error } = await useFetch('http://localhost:5204/api/users/login', {
     headers: {
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
+      'client-plataform': 'browser'
     },
     method: 'POST',
-    body:  JSON.stringify(form)
+    body:  form
   })
 }
 
