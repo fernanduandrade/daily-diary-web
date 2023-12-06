@@ -1,9 +1,7 @@
 export default defineNuxtConfig({
   devtools: { enabled: true },
   css: ['~/assets/css/main.css'],
-  modules: [
-    '@nuxtjs/storybook', '@pinia/nuxt'
-  ],
+  modules: ['@pinia/nuxt'],
   postcss: {
     plugins: {
       tailwindcss: {},
