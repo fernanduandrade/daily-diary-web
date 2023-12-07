@@ -36,7 +36,6 @@ const v$ = useVuelidate(rules, form)
 const loginUser = async () => {
   v$.value.$validate()
   if (v$.value.$error) {
-    console.log('caiu aqui')
     v$.value.$errors.forEach(error => $toast.warning(error.$message.toString()))
     return
   }
