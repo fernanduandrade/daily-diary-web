@@ -1,10 +1,10 @@
 import { defineStore } from "pinia";
-import type { User } from "../types";
-
+import type { BearerToken, User, UserLogged } from "../types";
+import { omit } from 'ramda'
 
 interface AuthState {
   isLogged: boolean,
-  user: User | null
+  user: UserLogged | null
 }
 
 export default defineStore('auth', {
@@ -12,13 +12,17 @@ export default defineStore('auth', {
   actions: {
     setUserLogged(user: User) {
       this.isLogged = true
-      this.user = user
+      const userLogged: UserLogged = omit(['token'], user)
+      this.user = userLogged
+
+      const token:BearerToken = `Bearer ${user.token}`
+      sessionStorage.setItem('Token', token) 
     },
     logout() {
       this.$reset()
     },
     getBearer() {
-      return this.user?.token
+      return sessionStorage.getItem('Token')
     }
   },
   getters: {}

@@ -12,6 +12,5 @@ definePageMeta({
 
 <template>
   <NuxtLayout />
-  <font-awesome-icon icon="fa-info-circle" color="#54BAD2"/>
   <h1>FUNCIONA KRL</h1>
 </template>

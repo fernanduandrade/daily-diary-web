@@ -1,18 +1,22 @@
 <script lang="ts" setup>
 import authStore from '~/features/auth/store/index'
-import type { User } from '~/features/auth/types';
+import type { UserLogged } from '~/features/auth/types';
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
 
 const useAuth = authStore()
-
-const userLogged = ref<User>()
+const userLogged = ref<UserLogged>()
 
 onMounted(() => {
   const { user } = useAuth
   userLogged.value = user!
 })
 
-// TODO DROPDOWN
+
+const logout = () => {
+  sessionStorage.clear()
+  useAuth.logout()
+  navigateTo('/login')
+}
 </script>
 
 <template>
@@ -32,7 +36,7 @@ onMounted(() => {
             <span class="sr-only">Search icon</span>
           </div>
           <input type="text" id="search-navbar"
-            class="block w-full p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            class="block w-full p-2 ps-10 text-sm text-gray-900 border focus:w-[450px] transition-all ease-linear border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             placeholder="Search for stories">
         </div>
         <button data-collapse-toggle="navbar-search" type="button"
@@ -43,6 +47,13 @@ onMounted(() => {
       <div class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1" id="navbar-search">
         <ul
           class="flex flex-col p-4 md:p-0 mt-4 font-medium border-none border-gray-100 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
+          <li class="self-center font-semibold">
+            <a href="#"
+              class="py-2 px-3 font-medium text-gray-950 hover:text-blue-600 rounded md:bg-transparent md:text-gray-800-700 md:p-0"
+              aria-current="page">
+              Write a diary
+            </a>
+          </li>
           <li>
             <Menu as="div" class="relative inline-block text-left">
               <div>
@@ -71,11 +82,11 @@ onMounted(() => {
                       Account
                       settings</a>
                     </MenuItem>
-                    <form method="POST" action="#">
+                    <form @submit.prevent="logout">
                       <MenuItem v-slot="{ active }">
                       <button type="submit"
                         :class="[active ? 'bg-gray-100 text-gray-900' : 'text-gray-700', 'block w-full px-4 py-2 text-left text-sm']">
-                        <font-awesome-icon icon="fa-solid fa-right-from-bracket"/>  Logout
+                        <font-awesome-icon icon="fa-solid fa-right-from-bracket"/> Logout
                         out</button>
                       </MenuItem>
                     </form>
