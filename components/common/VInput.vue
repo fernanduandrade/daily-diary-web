@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-
 defineEmits(['update:modelValue'])
 
 type InputType = 'text' | 'password' | 'email'
@@ -8,21 +7,29 @@ type InputProps = {
   type: InputType
   modelValue: string | number
   label?: string
-  floatLabel: boolean
-  placeholder: string
+  floatLabel?: boolean
+  placeholder?: string,
+  validateCallBack?: Function,
+  errorMessage?: string
 }
 
-withDefaults(defineProps<InputProps>(), {
+const props = withDefaults(defineProps<InputProps>(), {
   floatLabel: false,
   type: 'text',
-  placeholder: '',
-  modelValue: ''
 })
+
+const isValidField = computed(() => {
+  if (!!props.validateCallBack && typeof props.validateCallBack == 'function') {
+    return props.validateCallBack(props.modelValue)
+  }
+  return true
+})
+
 
 </script>
 
 <template>
-  <div class="relative border rounded w-full">
+  <div class="relative border rounded w-full" :class="[isValidField ? '' : 'border-red-600']">
     <input
       @input="$emit('update:modelValue', ($event.target as HTMLInputElement).value)"
       :type="type"
@@ -34,4 +41,5 @@ withDefaults(defineProps<InputProps>(), {
       {{ label }}
     </label>
   </div>
+  <span v-if="!isValidField" class="text-red-500 font-semibold">{{ errorMessage }}</span>
 </template>

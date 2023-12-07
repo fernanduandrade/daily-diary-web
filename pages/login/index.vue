@@ -8,6 +8,7 @@ useHead({
 })
 
 const useAuth = authStore()
+const { $toast } = useNuxtApp()
 
 const form = reactive({
   email: '',
@@ -22,6 +23,10 @@ const loginUser = async () => {
     method: 'POST',
     body:  form
   })
+  if(error.value?.statusCode === 400){
+    $toast.warning(error.value.data.description)
+    return
+  }
 
   useAuth.setUserLogged(data.value!.data)
   goToDash()

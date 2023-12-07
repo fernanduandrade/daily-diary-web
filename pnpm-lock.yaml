@@ -28,6 +28,9 @@ dependencies:
   ramda:
     specifier: ^0.29.1
     version: 0.29.1
+  vue-toast-notification:
+    specifier: ^3
+    version: 3.1.2(vue@3.3.9)
 
 devDependencies:
   '@nuxt/devtools':
@@ -6208,6 +6211,15 @@ packages:
       '@vue/devtools-api': 6.5.1
       vue: 3.3.9
     dev: true
+
+  /vue-toast-notification@3.1.2(vue@3.3.9):
+    resolution: {integrity: sha512-oNRL/W9aaHoeScp+iTIW7k09vM16/+8aptp2maa+7qTB43JuxmAgKdXKFYtf+uvSNOYYq2BIWgLCeJ61pwom/A==}
+    engines: {node: '>=12.15.0'}
+    peerDependencies:
+      vue: ^3.0
+    dependencies:
+      vue: 3.3.9
+    dev: false
 
   /vue@3.3.9:
     resolution: {integrity: sha512-sy5sLCTR8m6tvUk1/ijri3Yqzgpdsmxgj6n6yl7GXXCXqVbmW2RCXe9atE4cEI6Iv7L89v5f35fZRRr5dChP9w==}
