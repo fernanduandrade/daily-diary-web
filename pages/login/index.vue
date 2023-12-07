@@ -37,8 +37,8 @@ const goToDash = () => navigateTo('/')
 
       <hr class="h-px my-4 bg-gray-200 border-0 dark:bg-gray-700 w-full">
       <form @submit.prevent="loginUser" class="w-full flex flex-col gap-2">
-        <CommonVInput label="Email" v-model="form.email" type="email" placeholder="John" />
-        <CommonVInput label="Password" v-model="form.password" type="password" placeholder="Password" />
+        <CommonVInput :float-label="true" label="John" v-model="form.email" type="email" />
+        <CommonVInput :float-label="true" label="Password" v-model="form.password" type="password" />
         <button type="submit" class="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-full text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700">LOGIN</button>
         <button
           type="button"
