@@ -1,5 +1,8 @@
 <script lang="ts" setup>
-import { reactive } from 'vue';
+import { reactive } from 'vue'
+import { required, email, maxLength, minLength, helpers } from '@vuelidate/validators'
+import { useVuelidate } from '@vuelidate/core'
+
 const { $toast } = useNuxtApp()
 
 useHead({
@@ -7,13 +10,38 @@ useHead({
 })
 
 const validatePassword = ref('')
+
 const form = reactive({
   name: '',
   email: '',
   password: '',
 })
 
+const rules = computed(() => {
+  return {
+    email: {
+      required: helpers.withMessage('Email is required', required),
+      email: helpers.withMessage('Invalid email format',email) 
+    },
+    name: {
+      required: helpers.withMessage('Name is required', required),
+      minLength: maxLength(50)
+    },
+    password: {
+      required: helpers.withMessage('Password is required', required),
+      minLength: minLength(11)
+    }
+  }
+})
+
+const v$ = useVuelidate(rules, form)
+
 const registerUser = async () => {
+  v$.value.$validate()
+  if (v$.value.$error || !validatePassword.value) {
+    v$.value.$errors.forEach(error => $toast.warning(error.$message.toString()))
+    return
+  }
   const { error } = await useFetch('http://localhost:5204/api/users',{
     headers: {
       'Contect-Type': 'application/json',
@@ -49,9 +77,9 @@ const validatePasswordFn = (confirmPassword: string) => {
 
       <hr class="h-px my-4 bg-gray-200 border-0 dark:bg-gray-700 w-full">
       <form @submit.prevent="registerUser" class="w-full flex flex-col gap-2">
-        <CommonVInput label="Name" :float-label="true" v-model="form.name" />
-        <CommonVInput label="Email" :float-label="true" v-model="form.email" type="email"/>
-        <CommonVInput label="Password" :float-label="true" v-model="form.password" type="password" />
+        <CommonVInput @change="v$.name.$touch" label="Name" :float-label="true" v-model="form.name" />
+        <CommonVInput @change="v$.email.$touch" label="Email" :float-label="true" v-model="form.email" type="email"/>
+        <CommonVInput @change="v$.password.$touch" label="Password" :float-label="true" v-model="form.password" type="password" />
         <CommonVInput
           label="Confirm password"
           :float-label="true"
@@ -59,12 +87,11 @@ const validatePasswordFn = (confirmPassword: string) => {
           type="password"
           :validate-call-back="validatePasswordFn"
           error-message="Passwords are not equal"/>
-        <button
+        <CommonVButton
           type="submit"
-          class="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-full text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700"
-        >
+          >
           Register
-        </button>
+        </CommonVButton>
       </form>
     </div>
   </main>

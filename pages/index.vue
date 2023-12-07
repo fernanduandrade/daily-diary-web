@@ -12,5 +12,7 @@ definePageMeta({
 
 <template>
   <NuxtLayout />
-  <h1>FUNCIONA KRL</h1>
+  <main class="h-full bg-slate-100">
+
+  </main>
 </template>

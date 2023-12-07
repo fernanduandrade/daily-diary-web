@@ -16,6 +16,8 @@ type InputProps = {
 const props = withDefaults(defineProps<InputProps>(), {
   floatLabel: false,
   type: 'text',
+  label: '',
+  placeholder: ''
 })
 
 const isValidField = computed(() => {
