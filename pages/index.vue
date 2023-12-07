@@ -1,9 +1,17 @@
 <script lang="ts" setup>
-definePageMeta({
-  middleware: 'auth'
+useHead({
+  title: 'Diary'
 })
+
+definePageMeta({
+  middleware: 'auth',
+  layout: 'the-nav-bar'
+})
+
 </script>
 
 <template>
-  <h1>Oiii</h1>
+  <NuxtLayout />
+  <font-awesome-icon icon="fa-info-circle" color="#54BAD2"/>
+  <h1>FUNCIONA KRL</h1>
 </template>

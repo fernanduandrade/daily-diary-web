@@ -1,4 +1,13 @@
 <script lang="ts" setup>
+import type { ApiResponse } from '~/common/types/apiResponse';
+import authStore from '~/features/auth/store/'
+import type { User } from '~/features/auth/types';
+
+useHead({
+  title: 'Login'
+})
+
+const useAuth = authStore()
 
 const form = reactive({
   email: '',
@@ -6,20 +15,19 @@ const form = reactive({
 })
 
 const loginUser = async () => {
-  const  { data, error } = await useFetch('http://localhost:5204/api/users/login', {
+  const  { data, error } = await useFetch<ApiResponse<User>>('http://localhost:5204/api/users/login', {
     headers: {
-      'Content-Type': 'application/json',
-      'client-plataform': 'browser'
+      'Content-Type': 'application/json'
     },
     method: 'POST',
     body:  form
   })
+
+  useAuth.setUserLogged(data.value!.data)
+  goToDash()
 }
 
-const goToRegister = () => {
-  navigateTo('/register')
-}
-const value = ref('')
+const goToDash = () => navigateTo('/')
 </script>
 
 <template>
@@ -33,7 +41,6 @@ const value = ref('')
         <CommonVInput label="Password" v-model="form.password" type="password" placeholder="Password" />
         <button type="submit" class="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-full text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700">LOGIN</button>
         <button
-          @click="goToRegister"
           type="button"
           class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-full text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700">
             <NuxtLink to="/register">SIGN UP</NuxtLink>
