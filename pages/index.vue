@@ -11,8 +11,8 @@ definePageMeta({
 </script>
 
 <template>
-  <NuxtLayout />
   <main class="h-full bg-slate-100">
-
+    <NuxtLayout />
+      
   </main>
 </template>
