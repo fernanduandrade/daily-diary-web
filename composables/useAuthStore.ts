@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import type { BearerToken, User, UserLogged } from "../types";
+import type { BearerToken, User, UserLogged } from "../features/auth/types";
 import { omit } from 'ramda'
 
 interface AuthState {

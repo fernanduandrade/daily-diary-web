@@ -6,7 +6,11 @@ import { useVuelidate } from '@vuelidate/core'
 const { $toast } = useNuxtApp()
 
 useHead({
-  title: 'Register user'
+  title: 'Register user',
+})
+
+definePageMeta({
+  auth: false
 })
 
 const validatePassword = ref('')
@@ -72,7 +76,7 @@ const validatePasswordFn = (confirmPassword: string) => {
           <NuxtLink :to="'/login'" title="Back">
             <font-awesome-icon class="hover:cursor-pointer" icon="fa-solid fa-chevron-left" />
           </NuxtLink>
-        <h1 class="text-5xl font-normal font-ephesis">Diary</h1>
+        <h1 class="text-5xl font-normal font-ephesis">Diary <font-awesome-icon icon="fa-solid fa-feather-pointed" /></h1>
       </div>
 
       <hr class="h-px my-4 bg-gray-200 border-0 dark:bg-gray-700 w-full">

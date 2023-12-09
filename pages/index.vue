@@ -4,8 +4,8 @@ useHead({
 })
 
 definePageMeta({
-  middleware: 'auth',
-  layout: 'the-nav-bar'
+  layout: 'the-nav-bar',
+  auth: true
 })
 
 </script>

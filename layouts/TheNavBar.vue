@@ -1,20 +1,19 @@
 <script lang="ts" setup>
-import authStore from '~/features/auth/store/index'
 import type { UserLogged } from '~/features/auth/types';
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/vue'
 
-const useAuth = authStore()
+const authStore = useAuthStore()
 const userLogged = ref<UserLogged>()
 
 onMounted(() => {
-  const { user } = useAuth
+  const { user } = authStore
   userLogged.value = user!
 })
 
 
 const logout = () => {
   sessionStorage.clear()
-  useAuth.logout()
+  authStore.logout()
   navigateTo('/login')
 }
 </script>
@@ -25,7 +24,7 @@ const logout = () => {
       <a href="https://flowbite.com/" class="flex items-center space-x-3 rtl:space-x-reverse">
         <h1 class="self-center text-5xl font-ephesis font-semibold whitespace-nowrap dark:text-white">
           <NuxtLink :to="'/'">
-            Diary
+            Diary <font-awesome-icon icon="fa-solid fa-feather-pointed" />
           </NuxtLink>
         </h1>
       </a>
@@ -36,7 +35,7 @@ const logout = () => {
             <span class="sr-only">Search icon</span>
           </div>
           <input type="text" id="search-navbar"
-            class="block w-full p-2 ps-10 text-sm text-gray-900 border focus:w-[450px] transition-all ease-linear border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            class="block w-full p-2 ps-10 text-sm text-gray-900 border focus:w-[450px] transition-all ease-in border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             placeholder="Search for stories">
         </div>
         <button data-collapse-toggle="navbar-search" type="button"
@@ -51,7 +50,7 @@ const logout = () => {
             <a href="#"
               class="py-2 px-3 font-medium text-gray-950 hover:text-blue-600 rounded md:bg-transparent md:text-gray-800-700 md:p-0"
               aria-current="page">
-              Write a diary
+              <NuxtLink :to="'/diaries/create'">Write a diary</NuxtLink>
             </a>
           </li>
           <li>

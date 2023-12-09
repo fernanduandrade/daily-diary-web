@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import type { ApiResponse } from '~/common/types/apiResponse'
-import authStore from '~/features/auth/store/'
 import type { User } from '~/features/auth/types'
 import { required, email, helpers } from '@vuelidate/validators'
 import { useVuelidate } from '@vuelidate/core'
@@ -9,7 +8,11 @@ useHead({
   title: 'Login'
 })
 
-const useAuth = authStore()
+definePageMeta({
+  auth: false
+})
+
+const authStore = useAuthStore()
 const { $toast } = useNuxtApp()
 
 const form = reactive({
@@ -49,7 +52,7 @@ const loginUser = async () => {
     return
   }
 
-  useAuth.setUserLogged(data.value!.data)
+  authStore.setUserLogged(data.value!.data)
   goToDash()
 }
 
@@ -59,7 +62,7 @@ const goToDash = () => navigateTo('/')
 <template>
   <main class="flex items-center justify-center h-screen bg-cyan-50">
     <div class="flex p-4 justify-center shadow-md items-center flex-col gap-2 w-[35%] bg-white rounded">
-      <h1 class="text-5xl mb-3 font-normal font-ephesis">Diary</h1>
+      <h1 class="text-5xl mb-3 font-normal font-ephesis">Diary <font-awesome-icon icon="fa-solid fa-feather-pointed" /></h1>
 
       <form @submit.prevent="loginUser" class="w-full flex flex-col gap-2">
         <CommonVInput @change="v$.email.$touch" :float-label="true" label="Email" v-model="form.email" type="email" />
