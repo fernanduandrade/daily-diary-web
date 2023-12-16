@@ -5,11 +5,16 @@ definePageMeta({
 })
 
 onMounted(() => {
-  console.log('ao menos tá caindo aqui?')
 })
-const test = ref('')
-function createDiary() {}
-const isPublic = ref(false)
+const form = reactive({
+  isPublic: false,
+  title: '',
+  text: '',
+  mood: ''
+})
+function createDiary() {
+  console.log(form)
+}
 </script>
 
 <template>
@@ -19,26 +24,31 @@ const isPublic = ref(false)
       <form @submit.prevent="createDiary" class="w-full p-4 flex flex-col gap-3">
         <div class="self-center">
           <input
-          class="font-ephesis border-none outline-none text-center capitalize text-3xl placeholder:text-center" 
-          type="text" placeholder="title">
+          class="font-ephesis border-none outline-0 text-center capitalize text-3xl placeholder:text-center" 
+          type="text" :value="form.title" placeholder="title">
         </div>
         
         <div class="flex gap-4 justify-around">
           <div>
-            <CommonVCheckbox v-model="isPublic" type="checkbox" label="Is public?" />
+            <CommonVCheckbox v-model="form.isPublic" type="checkbox" label="Is public?" />
           </div>
 
           <div>
-            <!-- <CommonVInputLabel v-model="isPublic" type="text" label="Mood" /> -->
+            <div class="flex justify-center items-center p-0 m-0 gap-3">
+              <input type="text" name="mood" :value="form.mood"
+              class="outline-0" placeholder="Mood"
+              >
+            </div>
           </div>
+          
         </div>
         
         <div class="h-[80%] mb-8">
-          <CommonVTextAreaWrite class="h-full" label="Write here" v-model="test" />
+          <CommonVTextAreaWrite class="h-full" label="Write here" v-model="form.text" />
         </div>
 
         <div class="self-start w-[30%]">
-            <CommonVButton>Publish</CommonVButton>
+            <CommonVButton type="submit">Publish</CommonVButton>
         </div>
       </form>
     </main>
