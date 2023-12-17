@@ -18,6 +18,7 @@ body {
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
   font-family: 'Nunito', sans-serif;
+  background-color: #cffafe;
 }
 img, picture, video, canvas, svg {
   display: block;

@@ -1,7 +1,10 @@
 <script lang="ts" setup>
+import useVuelidate from '@vuelidate/core';
+import { helpers, required, email } from '@vuelidate/validators';
 import type { ApiResponse } from '~/common/types/apiResponse';
 import type { Diary } from '~/features/diaries/types/index'
 
+const { $toast } = useNuxtApp()
 const authStore = useAuthStore()
 
 definePageMeta({
@@ -16,10 +19,33 @@ const form = reactive({
   isPublic: false,
   title: '',
   text: '',
-  mood: ''
+  mood: '',
+  userId: authStore.getUserId
 })
 
+const rules = computed(() => {
+  return {
+    title: {
+      required: helpers.withMessage('Title is missing', required),
+    },
+    text: {
+      required: helpers.withMessage('Text is missing', required)
+    },
+    mood: {
+      required: helpers.withMessage('Mood is missing', required)
+    }
+  }
+})
+
+const v$ = useVuelidate(rules, form)
+
 async function createDiary() {
+  v$.value.$validate()
+  if (v$.value.$error) {
+    v$.value.$errors.forEach(error => $toast.warning(error.$message.toString()))
+    return
+  }
+
   const { data, error } = await useFetch<ApiResponse<Diary>>('http://localhost:5204/api/diaries', {
     headers: {
       'Content-Type': 'application/json',
@@ -28,19 +54,28 @@ async function createDiary() {
     method: 'POST',
     body: form
   })
+  
+  console.log(error.value?.statusCode)
+  if(error.value?.statusCode === 400) {
+    $toast.warning(error.value.data.description)
+    return
+  }
+
+  $toast.success('Your diary was written successfully.')
+  navigateTo('/')
 }
 </script>
 
 <template>
-  <main class="h-full flex justify-center flex-col bg-white">
+  <main class="h-full flex justify-center flex-col">
     <NuxtLayout />
     <main class="flex mt-4 self-center justify-center h-[700px] shadow-md w-1/2 bg-white p-2 rounded-sm">
       <form @submit.prevent="createDiary" class="w-full p-4 flex flex-col gap-3">
-        <div class="self-center">
+        <div class="self-center border-b-2 border-black">
           <CommonVInputOutline v-model="form.title" placeholder="Title" />
         </div>
         
-        <div class="flex gap-4 justify-around">
+        <div class="flex gap-4 justify-around ">
           <div>
             <CommonVCheckbox v-model="form.isPublic" type="checkbox" label="Is public?" />
           </div>
