@@ -24,11 +24,14 @@ export default defineStore('auth', {
       sessionStorage.removeItem('Token')
       localStorage.removeItem('user')
     },
-    getBearer() {
-      return sessionStorage.getItem('Token')
-    }
   },
   getters: {
+    getBearer: () =>  {
+      if(process.client) {
+        return sessionStorage.getItem('Token')
+      }
+    },
+    getUserId: (state) => state.user!.id
     // TODO adicionar localStorage
   },
 
