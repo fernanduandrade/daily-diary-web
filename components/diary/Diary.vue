@@ -2,6 +2,8 @@
 <script lang="ts" setup>
 import type { Diary } from '~/features/diaries/types';
 
+const authStore = useAuthStore()
+
 const props = defineProps({
   diary: {
     type: Object as PropType<Diary>,
@@ -35,6 +37,22 @@ const publishDate = computed(() => {
   return getDateDiff(diaryDate)
 })
 
+const favoriteDiary = async (isFavorited: boolean) => {
+  const payload = {
+    userId: props.diary.user?.id,
+    diaryId: props.diary.id
+  }
+  const type = isFavorited ? 'favorite' : 'unfavorite'
+  return await useFetch(`http://localhost:5204/api/likes/${type}`, {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `${authStore.getBearer}`
+      },
+      method: 'POST',
+      body: payload
+    })
+}
+
 </script>
 
 <template>
@@ -51,18 +69,23 @@ const publishDate = computed(() => {
       v-if="diary.isPublic"
     >
       <div
+        @click="favoriteDiary(diary.isFavorited = !diary.isFavorited)"
         title="Favorite"
-        class="rounded-full w-[37px] p-2 h-[37px] flex items-center justify-center">
-        <font-awesome-icon class="text-[25px] text-red-600" icon="fa-solid fa-heart" />
+        class="transition ease-in-out rounded-full w-[37px] p-2 h-[37px] hover:bg-red-100 hover:cursor-pointer flex items-center justify-center gap-1">
+        <font-awesome-icon class="text-[25px] text-red-600"
+          :icon="diary.isFavorited ? 'fa-solid fa-heart' : 'fa-regular fa-heart'"
+          />
+        <span>{{ diary.likesCount }}</span>
       </div>
       <div
         title="Comment"
-        class="rounded-full w-[37px] p-2 h-[37px] flex items-center justify-center">
-        <font-awesome-icon class="text-[25px] text-blue-400" icon="fa-solid fa-comment" />
+        class="transition ease-in-out rounded-full w-[37px] p-2 h-[37px] hover:cursor-pointer hover:bg-blue-100 flex items-center justify-center">
+        <font-awesome-icon class="text-[25px] text-blue-400" icon="fa-regular fa-comment" />
       </div>
       <div
-        class="rounded-full w-[37px] p-2 h-[37px] flex items-center justify-center">
-        <font-awesome-icon class="text-[25px]" icon="fa-solid fa-share" />
+        title="Share"
+        class="transition ease-in-out rounded-full w-[37px] p-2 h-[37px] hover:cursor-pointer hover:bg-blue-100 flex items-center justify-center">
+        <font-awesome-icon class="text-[25px] hover:text-blue-400" icon="fa-regular fa-share-square" />
       </div>
     </div>
   </main>
