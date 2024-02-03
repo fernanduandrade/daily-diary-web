@@ -11,6 +11,8 @@ const props = defineProps({
   }
 })
 
+const emit = defineEmits(['updateCounter'])
+
 const getDateDiff = (createdAtDate: Date) => {
   const createdDate = new Date(createdAtDate);
   const currentDate = new Date();
@@ -19,9 +21,7 @@ const getDateDiff = (createdAtDate: Date) => {
 
   const minutesDifference = Math.floor(timeDifference / (1000 * 60));
   const hoursDifference = Math.floor(timeDifference / (1000 * 60 * 60));
-  const daysDifference = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
 
-  // Determine the appropriate output based on the time difference
   if (minutesDifference < 60) {
       return `Posted on ${minutesDifference} min ago`
   }
@@ -38,6 +38,10 @@ const publishDate = computed(() => {
 })
 
 const favoriteDiary = async (isFavorited: boolean) => {
+  const counter = isFavorited ? 1 : -1
+  props.diary.likesCount! += counter
+
+  
   const payload = {
     userId: props.diary.user?.id,
     diaryId: props.diary.id
@@ -51,6 +55,7 @@ const favoriteDiary = async (isFavorited: boolean) => {
       method: 'POST',
       body: payload
     })
+    
 }
 
 </script>
@@ -63,7 +68,9 @@ const favoriteDiary = async (isFavorited: boolean) => {
       </span>
       <span>{{ publishDate }} </span>
     </div>
-    <span class="text-2xl hover:cursor-pointer" title="Title">{{ diary.title }}</span>
+    <NuxtLink :to="`/diaries/${diary.id}`">
+      <span class="text-2xl hover:cursor-pointer" title="Title">{{ diary.title }}</span>
+    </NuxtLink>
     <div
       class="p-2 w-full flex justify-center gap-[10rem]"
       v-if="diary.isPublic"
